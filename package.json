@@ -1,0 +1,25 @@
+{
+  "name": "@starless/forge-toolkit",
+  "version": "0.1.0",
+  "description": "AI-directed procedural 3D character generation toolkit for Starless Forge",
+  "type": "module",
+  "main": "./src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./core/*": "./src/core/*.js",
+    "./modules/*": "./src/modules/*.js"
+  },
+  "scripts": {
+    "test": "node --test"
+  },
+  "peerDependencies": {
+    "three": ">=0.160.0"
+  },
+  "devDependencies": {
+    "three": "^0.180.0"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "license": "MIT"
+}
