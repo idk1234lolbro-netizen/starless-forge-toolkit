@@ -4,6 +4,7 @@ import * as THREE from "three";
 import {generateCharacter} from "../src/index.js";
 import {createBody} from "../src/modules/body.js";
 import {createFace} from "../src/modules/face.js";
+import {createHair} from "../src/modules/hair.js";
 import {makePalette} from "../src/core/materials.js";
 
 test("generates valid geometry with the supplied host THREE instance",()=>{
@@ -38,4 +39,16 @@ test("face builds anime-inspired eyes and supports all four expressions",()=>{
     counts.push(meshes);
   }
   assert.equal(new Set(counts).size,2);
+});
+
+test("hair creates volumetric tapered locks for all supported styles",()=>{
+  const palette=makePalette({},THREE);
+  for(const style of ["long","short","medium","ponytail","twin_tails"]){
+    const result=createHair({hair:{style,length:1.05,strands:12}},palette,THREE);
+    assert.equal(result.ok,true);
+    assert.equal(result.metrics.construction,"layered-tapered-locks");
+    let locks=0;
+    result.object.traverse(o=>{if(o.isMesh&&o.userData.geometryType==="tapered-hair-lock"){locks++;const p=o.geometry.getAttribute("position");for(let i=0;i<p.count;i++)assert.ok(Number.isFinite(p.getX(i)+p.getY(i)+p.getZ(i)));}});
+    assert.ok(locks>=20);
+  }
 });
