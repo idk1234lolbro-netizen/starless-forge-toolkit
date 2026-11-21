@@ -35,6 +35,8 @@ export function addEllipticalLoft(T,parent,mat,sections,radialSegments=24){
   geometry.setIndex(indices);
   geometry.computeVertexNormals();
   const mesh=new T.Mesh(geometry,mat);
+  mesh.name="EllipticalLoft";
+  mesh.userData.geometryType="elliptical-loft";
   mesh.castShadow=true;mesh.receiveShadow=true;parent.add(mesh);
   return mesh;
 }
