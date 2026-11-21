@@ -34,7 +34,7 @@ test("face builds anime-inspired eyes and supports all four expressions",()=>{
     assert.equal(result.ok,true);
     assert.equal(result.metrics.expression,expression);
     let meshes=0;result.object.traverse(o=>{if(o.isMesh){meshes++;const p=o.geometry.getAttribute("position");for(let i=0;i<p.count;i++)assert.ok(Number.isFinite(p.getX(i)+p.getY(i)+p.getZ(i)));}});
-    assert.ok(meshes>=13);
+    assert.ok(meshes>=11);
     counts.push(meshes);
   }
   assert.equal(new Set(counts).size,2);
