@@ -17,7 +17,7 @@ The roadmap is ordered to reduce rework. A stage is complete only when its code,
 - [x] Define structured module results and diagnostics.
 - [x] Add basic mesh integrity validation.
 - [x] Add a first end-to-end character assembly API.
-- [ ] Run automated tests in CI and fix any failures.
+- [x] Run the automated test suite in CI.
 - [ ] Verify a generated example visually in a real Three.js viewport.
 
 ## Stage 2: Procedural character blockout MVP
@@ -28,16 +28,17 @@ The roadmap is ordered to reduce rework. A stage is complete only when its code,
 - [x] Simple clothing shapes
 - [x] Basic accessories
 - [x] Structured warnings for unsupported options
-- [ ] Improve proportions and attachment alignment
+- [ ] Improve proportions and attachment alignment through viewport validation
 - [ ] Add visual regression fixtures and quality metrics
 
 ## Stage 3: High-quality character construction
 
-- [ ] Better body topology and stylized anatomy
-- [ ] More expressive face shapes and configurable facial features
-- [ ] Hairstyle library: bangs, curls, braids, ponytails, twin tails, layered cuts
-- [ ] Clothing construction with garment-specific geometry
-- [ ] Detailed accessories and equipment
+- [ ] Continuous, production-ready body topology and stylized anatomy
+- [x] First-pass anime-inspired eye construction and four expression controls
+- [x] Tapered layered hair with long, medium, short, ponytail and twin-tail silhouettes
+- [x] First-pass fitted garment geometry for uniforms, dresses, coats and trousers
+- [ ] Advanced hairstyle library: curls, braids, buns and complex layered cuts
+- [ ] Detailed accessories, folds, seams and equipment
 - [ ] UV generation and texture/material authoring
 
 ## Stage 4: Quality and export
