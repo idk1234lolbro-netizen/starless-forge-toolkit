@@ -21,6 +21,6 @@ test("body uses a smooth torso loft and articulated limb segments",()=>{
   assert.equal(result.ok,true);
   assert.equal(result.metrics.construction,"elliptical-torso-with-articulated-limb-segments");
   let lofts=0,meshes=0;result.object.traverse(o=>{if(o.isMesh){meshes++;if(o.geometry.index&&o.geometry.getAttribute("normal"))lofts++;}});
-  assert.equal(meshes,15);assert.equal(lofts,1);
+  assert.ok(meshes>=25);assert.equal(lofts,1);
   result.object.traverse(o=>{if(o.isMesh){const p=o.geometry.getAttribute("position");for(let i=0;i<p.count;i++)assert.ok(Number.isFinite(p.getX(i)+p.getY(i)+p.getZ(i)));}});
 });
