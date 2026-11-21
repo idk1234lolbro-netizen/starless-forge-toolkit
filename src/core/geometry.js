@@ -1,39 +1,4 @@
-import * as THREE from "three";
-
-export function addSphere(parent, material, position, scale, segments = 24) {
-  const mesh = new THREE.Mesh(new THREE.SphereGeometry(1, segments, Math.max(12, Math.floor(segments * 0.7))), material);
-  mesh.position.set(...position);
-  mesh.scale.set(...scale);
-  mesh.castShadow = true;
-  mesh.receiveShadow = true;
-  parent.add(mesh);
-  return mesh;
-}
-
-export function addCylinderBetween(parent, material, start, end, radiusTop, radiusBottom = radiusTop, radialSegments = 12) {
-  const a = new THREE.Vector3(...start);
-  const b = new THREE.Vector3(...end);
-  const direction = new THREE.Vector3().subVectors(b, a);
-  const length = direction.length();
-  const mesh = new THREE.Mesh(new THREE.CylinderGeometry(radiusTop, radiusBottom, length, radialSegments), material);
-  mesh.position.copy(a).add(b).multiplyScalar(0.5);
-  mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), direction.normalize());
-  mesh.castShadow = true;
-  mesh.receiveShadow = true;
-  parent.add(mesh);
-  return mesh;
-}
-
-export function addTube(parent, points, material, radius = 0.035, tubularSegments = 24) {
-  const curve = new THREE.CatmullRomCurve3(points.map(p => new THREE.Vector3(...p)));
-  const mesh = new THREE.Mesh(new THREE.TubeGeometry(curve, tubularSegments, radius, 8, false), material);
-  mesh.castShadow = true;
-  mesh.receiveShadow = true;
-  parent.add(mesh);
-  return mesh;
-}
-
-export function setObjectName(object, name) {
-  object.name = name;
-  return object;
-}
+export function addSphere(T,parent,mat,pos,scale,segments=24){const m=new T.Mesh(new T.SphereGeometry(1,segments,Math.max(12,Math.floor(segments*.7))),mat);m.position.set(...pos);m.scale.set(...scale);m.castShadow=true;m.receiveShadow=true;parent.add(m);return m}
+export function addCylinderBetween(T,parent,mat,start,end,rt,rb=rt,radial=12){const a=new T.Vector3(...start),b=new T.Vector3(...end),d=new T.Vector3().subVectors(b,a),len=d.length(),m=new T.Mesh(new T.CylinderGeometry(rt,rb,len,radial),mat);m.position.copy(a).add(b).multiplyScalar(.5);m.quaternion.setFromUnitVectors(new T.Vector3(0,1,0),d.normalize());m.castShadow=true;m.receiveShadow=true;parent.add(m);return m}
+export function addTube(T,parent,points,mat,radius=.035,segments=24){const c=new T.CatmullRomCurve3(points.map(p=>new T.Vector3(...p))),m=new T.Mesh(new T.TubeGeometry(c,segments,radius,8,false),mat);m.castShadow=true;m.receiveShadow=true;parent.add(m);return m}
+export function setObjectName(o,n){o.name=n;return o}

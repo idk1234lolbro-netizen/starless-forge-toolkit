@@ -1,39 +1,34 @@
 # Integration with the in-website AI
 
-The toolkit is designed to be called by the AI embedded in Starless Forge. It does not include a language model or make network requests.
-
-## Basic call
+The toolkit does not import or bundle Three.js. The host passes the exact Three.js namespace used by its viewport. Vendor the toolkit's src directory into the website, preserving folder structure; all toolkit imports are relative.
 
 ```js
-import { generateCharacter } from "@starless/forge-toolkit";
-
-const result = generateCharacter({
-  name: "Mira",
-  proportions: { height: 1.68 },
-  hair: { style: "long", length: 1.1, strands: 16 },
-  clothing: { kind: "uniform" },
-  accessories: [{ type: "hair_clip" }]
-});
-
+const toolkit = await import("./vendor/starless-forge-toolkit/src/index.js");
+const result = toolkit.generateCharacter(validatedSpec, { THREE: ctx.THREE });
 if (!result.ok) {
-  // Show result.diagnostics to the AI so it can revise the specification.
+  // Return result.diagnostics to the existing repair/critic pipeline.
 } else {
-  forgeScene.add(result.object);
+  // result.object is a THREE.Group made with the viewport's Three.js instance.
+  ctx.scene.add(result.object);
 }
 ```
 
-The exact integration depends on the website's actual module system and Three.js instance. If the website already bundles Three.js, configure the toolkit to share that same Three.js dependency rather than loading a second copy.
+Do not add another Three.js import inside the toolkit. Pass the same THREE namespace used by Forge.
+
+## API
+
+`generateCharacter(spec, { THREE })` returns `{ ok, object, parts, diagnostics, metrics, dispose }`. Generation is synchronous. `object` is a THREE.Group. `dispose()` releases generated geometries and materials when discarded.
+
+## Conventions
+
+- Y-up, character stands near Y = 0, default nominal height 1.7 units.
+- Character faces positive Z.
+- No external AI, GPU compute, WASM, Python, or native binaries are required.
 
 ## AI responsibility
 
-The embedded AI should translate a user's natural-language request into a structured specification. It should not send raw prompt text directly to geometry functions.
+The embedded AI converts natural language into a structured specification. Do not pass raw prompts directly to geometry functions. Unsupported details should be surfaced as diagnostics.
 
-For example, "long silver hair" becomes `hair: { style: "long", length: 1.1 }` and a hair colour in `palette.hair`. Unsupported details should be surfaced as diagnostics, not silently claimed as complete.
+## Current limits
 
-## Current implementation limits
-
-The first procedural generator is a blockout-quality foundation. It uses primitive and curve-based geometry. It does not yet provide production anime anatomy, sculpted facial topology, realistic garment patterns, UV unwrapping, texture painting, hair physics, rigging, animation, or a GLB exporter. Those require dedicated, separately tested systems.
-
-## Browser compatibility
-
-The package uses Three.js geometry APIs and has no server, Python, CUDA, or native binary requirement. The host application remains responsible for scene rendering, controls, and asset export.
+This is a procedural blockout foundation, not a finished anime character modeller. It does not yet provide production anatomy, sculpted facial topology, realistic garment patterns, UVs, painted textures, hair physics, rigging, animation, or GLB export.

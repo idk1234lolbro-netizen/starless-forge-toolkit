@@ -9,7 +9,7 @@ const result = generateCharacter({
   clothing: { kind: "uniform" },
   accessories: [{ type: "hair_clip" }, { type: "earrings" }],
   palette: { skin: "#f2c9b4", hair: "#28243b", eyes: "#548ec0", clothes: "#30364b", clothesAccent: "#b7b2cf" }
-});
+}, { THREE });
 
 const scene = new THREE.Scene();
 scene.add(result.object);
