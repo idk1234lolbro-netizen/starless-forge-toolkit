@@ -5,6 +5,7 @@ import {generateCharacter} from "../src/index.js";
 import {createBody} from "../src/modules/body.js";
 import {createFace} from "../src/modules/face.js";
 import {createHair} from "../src/modules/hair.js";
+import {createClothing} from "../src/modules/clothing.js";
 import {makePalette} from "../src/core/materials.js";
 
 test("generates valid geometry with the supplied host THREE instance",()=>{
@@ -50,5 +51,17 @@ test("hair creates volumetric tapered locks for all supported styles",()=>{
     let locks=0;
     result.object.traverse(o=>{if(o.isMesh&&o.userData.geometryType==="tapered-hair-lock"){locks++;const p=o.geometry.getAttribute("position");for(let i=0;i<p.count;i++)assert.ok(Number.isFinite(p.getX(i)+p.getY(i)+p.getZ(i)));}});
     assert.ok(locks>=20);
+  }
+});
+
+test("clothing builds fitted garment volumes and supports outfit styles",()=>{
+  const palette=makePalette({},THREE);
+  for(const kind of ["uniform","dress","coat","pants","casual"]){
+    const result=createClothing({clothing:{kind,sleeves:kind==="coat"?"long":"short"}},palette,THREE);
+    assert.equal(result.ok,true);
+    assert.equal(result.metrics.kind,kind);
+    assert.equal(result.metrics.construction,"fitted-loft-garment-with-layered-panels");
+    let meshes=0;result.object.traverse(o=>{if(o.isMesh){meshes++;const p=o.geometry.getAttribute("position");for(let i=0;i<p.count;i++)assert.ok(Number.isFinite(p.getX(i)+p.getY(i)+p.getZ(i)));}});
+    assert.ok(meshes>=10);
   }
 });
