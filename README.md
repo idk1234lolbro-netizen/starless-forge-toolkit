@@ -1,14 +1,66 @@
 # Starless Forge Toolkit
 
-**An AI-first 3D character generation toolkit for Nova AI.**
+**An AI-first procedural 3D character generation toolkit for Nova AI.**
 
-Starless Forge is intended to turn Nova's structured character plans into reusable 3D assets. Nova handles creative interpretation and orchestration; the toolkit provides predictable geometry-generation, assembly, validation, and export capabilities.
+Starless Forge Toolkit is a JavaScript/Three.js library intended to give the AI inside Starless Forge reusable character-building capabilities. Nova interprets a user's request and produces a structured character specification; the toolkit turns that specification into scene objects and reports what it could and could not generate.
 
-This is an internal toolkit, not a manual 3D editor. The intended workflow does not require the user to sculpt models or operate Blender.
+This is an internal generation library, not a manual 3D editor. The intended workflow does not require the user to sculpt models or operate Blender.
 
 ## Current status
 
-This repository is in its architecture and planning phase. The initial documentation is in place, but generator modules and runtime code have not yet been implemented or tested.
+The first procedural MVP is now implemented in `src/`. It can assemble a stylized blockout character from procedural body, face, hair, clothing, and accessory geometry, then validate basic mesh integrity.
+
+**Important:** this is an early blockout generator, not a finished anime character modeller. It does not yet provide production-quality anatomy, detailed sculpted topology, UVs, painted textures, garment pattern simulation, rigging, animation, or a GLB exporter. Automated tests are included but have not yet been executed in this environment.
+
+## Quick start
+
+The package expects the host application to provide Three.js:
+
+```sh
+npm install
+npm test
+```
+
+```js
+import { generateCharacter } from "@starless/forge-toolkit";
+
+const result = generateCharacter({
+  name: "Mira",
+  hair: { style: "long", length: 1.1, strands: 18 },
+  clothing: { kind: "uniform" },
+  accessories: [{ type: "hair_clip" }, { type: "earrings" }],
+  palette: {
+    hair: "#28243b",
+    eyes: "#548ec0",
+    clothes: "#30364b"
+  }
+});
+
+if (result.ok) {
+  forgeScene.add(result.object);
+} else {
+  console.warn(result.diagnostics);
+}
+```
+
+See [the integration guide](docs/INTEGRATION.md) before connecting it to the in-website AI. The exact import method depends on how the Perchance website loads scripts and which Three.js instance it uses.
+
+## Included modules
+
+- Body proportions and basic limb construction
+- Stylized face with eyes, brows, ears, nose, and mouth
+- Layered curve-based hair with basic length/style options
+- Simple clothing blockout
+- A small accessory set
+- Character assembly and mesh validation
+- Structured warnings and generation metrics
+
+## Documentation
+
+- [Architecture](docs/ARCHITECTURE.md)
+- [Module contract](docs/MODULE_CONTRACT.md)
+- [Integration with the in-website AI](docs/INTEGRATION.md)
+- [Roadmap](ROADMAP.md)
 
 ## Design principles
 
@@ -17,28 +69,8 @@ This repository is in its architecture and planning phase. The initial documenta
 - Shared geometry conventions and reusable utilities
 - Validation and diagnostics rather than silent failure
 - Reproducible procedural operations where practical
-- No mandatory Blender or desktop DCC dependency
-- Clear handling of uncertainty in image references
-
-## Documentation
-
-- [Architecture](docs/ARCHITECTURE.md): system boundaries, pipeline, and design decisions
-- [Module contract](docs/MODULE_CONTRACT.md): expected inputs, outputs, diagnostics, and tests
-- [Roadmap](ROADMAP.md): staged implementation plan and current progress
-
-## Planned generation flow
-
-```text
-Prompt and reference images
-        -> Nova interpretation
-        -> CharacterSpec
-        -> generation modules
-        -> assembly and validation
-        -> GLB/glTF export + report
-```
+- No mandatory Blender, Python, CUDA, or native binary dependency
 
 ## Development approach
 
-We will inspect the existing Nova project and runtime before selecting dependencies or implementing modules. The first feature module will be chosen based on that inspection, so existing capabilities are reused rather than duplicated.
-
-No module should be described as complete until it has working code, automated tests, and a representative example.
+Inspect the host application's existing Three.js setup before integration. Reuse its Three.js instance where possible. Do not claim a feature is production-ready until it has working code, automated tests, and representative visual examples.
